@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Passport;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Passport\TokenRepository;
 use Lcobucci\JWT\Configuration;
@@ -30,7 +31,7 @@ class PasswordGrantController extends Controller
         return app()->handle($httpRequest);
     }
 
-    public function logout(Request $request)
+    public function logout(): JsonResponse
     {
         $bearerToken = request()->bearerToken();
         $tokenId = Configuration::forSymmetricSigner(new Sha256(), InMemory::plainText('empty', 'empty'))
@@ -40,5 +41,7 @@ class PasswordGrantController extends Controller
             ->get('jti');
 
         $this->tokenRepository->revokeAccessToken($tokenId);
+
+        return response()->json(['message' => 'ok']);
     }
 }
