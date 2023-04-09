@@ -25,7 +25,7 @@ class PasswordGrantController extends Controller
             'client_secret' => config('passport.password_grant_client.secret'),
             'username' => $request->username,
             'password' => $request->password,
-            'scope' => '*',
+            'scope' => $request->scope ?? '*',
         ]);
 
         return app()->handle($httpRequest);

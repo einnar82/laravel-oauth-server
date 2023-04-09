@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Passport\AuthorizationCodesController;
 use Illuminate\Support\Facades\Route;
 
 /*
