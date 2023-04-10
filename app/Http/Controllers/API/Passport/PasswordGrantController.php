@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Passport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Laravel\Passport\RefreshTokenRepository;
 use Laravel\Passport\TokenRepository;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
@@ -13,8 +14,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PasswordGrantController extends Controller
 {
-    public function __construct(private TokenRepository $tokenRepository)
-    {
+    public function __construct(
+        private RefreshTokenRepository $refreshTokenRepository,
+        private TokenRepository $tokenRepository
+    ) {
     }
 
     public function login(Request $request): Response
@@ -41,6 +44,7 @@ class PasswordGrantController extends Controller
             ->get('jti');
 
         $this->tokenRepository->revokeAccessToken($tokenId);
+        $this->refreshTokenRepository->revokeRefreshTokensByAccessTokenId($tokenId);
 
         return response()->json(['message' => 'ok']);
     }
