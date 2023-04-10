@@ -14,11 +14,9 @@ class CreateTest extends AbstractApiTestCase
            'password' => 'somePassword',
            'password_confirmation' => 'somePassword'
         ];
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsUser(['create_user']);
 
-        $response = $this->postJson(self::BASE_URL, $data, [
-            'Authorization' => 'Bearer '.$bearerToken
-        ]);
+        $response = $this->postJson(self::BASE_URL, $data);
 
         $response->assertCreated()
             ->assertJsonStructure(self::RESOURCE_RESPONSE_STRUCTURE);
@@ -29,11 +27,9 @@ class CreateTest extends AbstractApiTestCase
 
     public function testCreateIfThrowsValidationException(): void
     {
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsUser(['create_user']);
 
-        $response = $this->postJson(self::BASE_URL, [], [
-            'Authorization' => 'Bearer '.$bearerToken
-        ]);
+        $response = $this->postJson(self::BASE_URL);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }

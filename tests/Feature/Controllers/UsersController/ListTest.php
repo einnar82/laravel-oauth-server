@@ -10,11 +10,9 @@ class ListTest extends AbstractApiTestCase
     {
         $user = User::factory()->create();
         User::factory(10)->create();
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsClient(['list_users']);
 
-        $response = $this->getJson(self::BASE_URL, [
-            'Authorization' => 'Bearer '.$bearerToken
-        ]);
+        $response = $this->getJson(self::BASE_URL);
         $payload = $response->json('data');
 
         $response->assertSuccessful()

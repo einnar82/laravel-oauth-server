@@ -14,11 +14,9 @@ class UpdateTest extends AbstractApiTestCase
             'name' => $this->faker->name,
             'email' => $this->faker->safeEmail,
         ];
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsUser(['update_user']);
 
-        $response = $this->putJson(\sprintf(self::BASE_URL.'/%s', $user->id), $data, [
-            'Authorization' => 'Bearer '.$bearerToken
-        ]);
+        $response = $this->putJson(\sprintf(self::BASE_URL.'/%s', $user->id), $data);
 
         $response->assertOk()
             ->assertJsonStructure(self::RESOURCE_RESPONSE_STRUCTURE);
@@ -29,11 +27,9 @@ class UpdateTest extends AbstractApiTestCase
 
     public function testUserNotFound(): void
     {
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsUser(['update_user']);
 
-        $response = $this->putJson(\sprintf(self::BASE_URL.'/%s', 'no-id'), [], [
-            'Authorization' => 'Bearer '.$bearerToken
-        ]);
+        $response = $this->putJson(\sprintf(self::BASE_URL.'/%s', 'no-id'));
 
         $response->assertNotFound();
     }
@@ -41,12 +37,10 @@ class UpdateTest extends AbstractApiTestCase
     public function testUpdateIfThrowsValidationException(): void
     {
         $user = User::factory()->create();
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsUser(['update_user']);
 
         $response = $this->putJson(\sprintf(self::BASE_URL.'/%s', $user->id), [
             'name' => 1
-        ], [
-            'Authorization' => 'Bearer '.$bearerToken
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);

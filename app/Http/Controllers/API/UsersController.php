@@ -70,9 +70,9 @@ class UsersController extends Controller
     {
         $this->middleware(['auth:api', 'scope:create_user'])
             ->only('store');
-        $this->middleware(['auth:api', 'client:list_users'])
+        $this->middleware(['client:list_users'])
             ->only('index');
-        $this->middleware(['auth:api', 'client:show_user'])
+        $this->middleware(['client:show_user'])
             ->only('show');
         $this->middleware(['auth:api', 'scope:update_user'])
             ->only('update');

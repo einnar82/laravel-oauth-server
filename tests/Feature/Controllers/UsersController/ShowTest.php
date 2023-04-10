@@ -8,11 +8,9 @@ class ShowTest extends AbstractApiTestCase
     public function testShowSucceeds(): void
     {
         $user = User::factory()->create();
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsClient(['show_user']);
 
-        $response = $this->getJson(\sprintf(self::BASE_URL.'/%s', $user->id), [
-            'Authorization' => 'Bearer '.$bearerToken
-        ]);
+        $response = $this->getJson(\sprintf(self::BASE_URL.'/%s', $user->id));
 
         $response->assertOk()
             ->assertJsonStructure(self::RESOURCE_RESPONSE_STRUCTURE);
@@ -23,11 +21,9 @@ class ShowTest extends AbstractApiTestCase
 
     public function testUserNotFound(): void
     {
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsClient(['show_user']);
 
-        $response = $this->getJson(\sprintf(self::BASE_URL.'/%s', 'no-id'), [
-            'Authorization' => 'Bearer '.$bearerToken
-        ]);
+        $response = $this->getJson(\sprintf(self::BASE_URL.'/%s', 'no-id'));
 
         $response->assertNotFound();
     }

@@ -9,22 +9,18 @@ class DeleteTest extends AbstractApiTestCase
     public function testDeleteSucceeds(): void
     {
         $user = User::factory()->create();
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsUser(['delete_user']);
 
-        $response = $this->deleteJson(\sprintf(self::BASE_URL.'/%s', $user->id), [], [
-            'Authorization' => 'Bearer '.$bearerToken
-        ]);
+        $response = $this->deleteJson(\sprintf(self::BASE_URL.'/%s', $user->id));
 
         $response->assertOk();
     }
 
     public function testUserNotFound(): void
     {
-        $bearerToken = $this->createUserToken();
+        $this->getActingAsUser(['delete_user']);
 
-        $response = $this->deleteJson(\sprintf(self::BASE_URL.'/%s', 'no-id'), [], [
-            'Authorization' => 'Bearer '.$bearerToken
-        ]);
+        $response = $this->deleteJson(\sprintf(self::BASE_URL.'/%s', 'no-id'));
 
         $response->assertNotFound();
     }

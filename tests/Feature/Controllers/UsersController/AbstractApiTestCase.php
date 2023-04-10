@@ -7,6 +7,8 @@ use Database\Seeders\OAuth2ClientSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Client;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 abstract class AbstractApiTestCase extends TestCase
@@ -42,23 +44,26 @@ abstract class AbstractApiTestCase extends TestCase
         ]
     ];
 
-    protected function createUserToken(string $scopes = '*'): string
+    protected function getActingAsClient(array $scopes = ['*']): void
     {
-        $user  = User::factory()->create();
-        $response = $this->postJson('/api/login', [
-            'username' => $user->email,
-            'password' => 'password',
-            'scope' => $scopes
-        ]);
+        Passport::actingAsClient(
+            Client::factory()->create(),
+            $scopes
+        );
+    }
 
-        $payload = $response->json();
-
-        return $payload['access_token'];
+    protected function getActingAsUser(array $scopes = ['*'], ?User $user = null): void
+    {
+        Passport::actingAs(
+            $user ?? User::factory()->create(),
+            $scopes
+        );
     }
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->runDatabaseMigrations();
         $this->seed(OAuth2ClientSeeder::class);
     }
 }
