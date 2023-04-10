@@ -10,7 +10,7 @@ class PersonalAccessClientController extends Controller
 {
     public function createToken(Request $request, User $user): JsonResponse
     {
-        $response = $user->createToken('Sample Personal Access Token', $request->get('scope') ?? []);
+        $response = $user->createToken('Sample Personal Access Token', $request->get('scope') ?? ['*']);
         return response()->json([
             'access_token' => $response->accessToken,
         ]);
