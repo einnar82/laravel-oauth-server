@@ -1,48 +1,32 @@
-# einnar82/laravel-oauth2
+## Laravel OAuth2 Server
 
-<!-- Initializer for Laravel Todos START  -->
-## TODO
+**Prerequisites:**
+- Docker
+- PHP 8.2
 
-This project was generated using
-([Initializer for Laravel](https://laravel.initializer.dev)). To finish
-the project setup run the following in your terminal:
+**Setup Instructions:**
 
-```shell
-./initialize
+- Copy the `.env.example` into `.env`
+
+- Install dependencies.
+```shell  
+	composer install
+```
+-  Start the development server.
+
+```shell  
+	./vendor/bin/sail up -d
 ```
 
-<!-- Initializer for Laravel Todos END  -->
-## Local Development
-
-This project uses
-[Laravel Sail](https://laravel.com/docs/sail) to manage
-its local development stack. For more detailed usage instructions take a look at
-the [official documentation](https://laravel.com/docs/sail).
-
-### Links
-
-- **Your Application** http://localhost
-- **Preview Emails via Mailpit** http://localhost:8025
-- **MeiliSearch Administration Panel** http://localhost:7700
-
-### Start the development server
-
-```shell
-./vendor/bin/sail up
+- Run passport install command.
+```shell  
+	./vendor/bin/sail artisan passport:install
 ```
-
-You can also use the `-d` option, to start the server in
-the background if you do not care about the logs or still want to use your
-terminal for other things.
-
-### Build frontend assets
-
-```shell
-./vendor/bin/sail npm watch
+- Run migrations and seeders.
+```shell  
+	./vendor/bin/sail artisan migrate:seed
 ```
-
-### Run Tests
-
-```shell
-./vendor/bin/sail test
+To run the tests, update the `.env.testing` and on your terminal type
+```shell  
+	./vendor/bin/sail artisan test
 ```
