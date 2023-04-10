@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Controllers\UsersController;
 
+use Symfony\Component\HttpFoundation\Response;
+
 class CreateTest extends AbstractApiTestCase
 {
     public function testCreateSucceeds(): void
@@ -9,7 +11,8 @@ class CreateTest extends AbstractApiTestCase
         $data = [
            'name' => $this->faker->name,
            'email' => $this->faker->safeEmail,
-           'password' => 'somePassword'
+           'password' => 'somePassword',
+           'password_confirmation' => 'somePassword'
         ];
         $bearerToken = $this->createUserToken();
 
@@ -22,5 +25,16 @@ class CreateTest extends AbstractApiTestCase
         $payload = $response->json('data');
         $this->assertEquals($data['email'], $payload['email']);
         $this->assertEquals($data['name'], $payload['name']);
+    }
+
+    public function testCreateIfThrowsValidationException(): void
+    {
+        $bearerToken = $this->createUserToken();
+
+        $response = $this->postJson(self::BASE_URL, [], [
+            'Authorization' => 'Bearer '.$bearerToken
+        ]);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

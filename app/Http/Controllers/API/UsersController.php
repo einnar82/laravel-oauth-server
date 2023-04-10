@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\CreateUserRequest;
+use App\Http\Requests\API\UpdateUserRequest;
 use App\Http\Resources\API\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +29,7 @@ class UsersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): UserResource
+    public function store(CreateUserRequest $request): UserResource
     {
         return new UserResource(User::query()->create(array_merge(
             $request->all(),
@@ -46,7 +48,7 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user): UserResource
+    public function update(UpdateUserRequest $request, User $user): UserResource
     {
         return new UserResource(\tap($user)->update(array_merge(
             $request->all(),

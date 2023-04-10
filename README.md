@@ -24,7 +24,7 @@
 ```
 - Run migrations and seeders.
 ```shell  
-	./vendor/bin/sail artisan migrate:seed
+	./vendor/bin/sail artisan migrate && ./vendor/bin/sail artisan db:seed
 ```
 To run the tests, update the `.env.testing` and on your terminal type
 ```shell  

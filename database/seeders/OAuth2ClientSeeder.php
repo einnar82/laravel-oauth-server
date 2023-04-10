@@ -24,7 +24,7 @@ class OAuth2ClientSeeder extends Seeder
     {
         if (\in_array(\config('app.env'), self::SELECTED_ENVIRONMENTS)) {
             DB::table(self::OAUTH_CLIENTS_TABLE)->truncate();
-            DB::table('oauth_clients')->insert([
+            DB::table(self::OAUTH_CLIENTS_TABLE)->insert([
                 [
                     'id' => '98e2e6a4-49ba-4e38-86fd-e68c6d2b38a9',
                     'user_id' => null,

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\UsersController;
 
 use App\Models\User;
+use Symfony\Component\HttpFoundation\Response;
 
 class UpdateTest extends AbstractApiTestCase
 {
@@ -35,5 +36,19 @@ class UpdateTest extends AbstractApiTestCase
         ]);
 
         $response->assertNotFound();
+    }
+
+    public function testUpdateIfThrowsValidationException(): void
+    {
+        $user = User::factory()->create();
+        $bearerToken = $this->createUserToken();
+
+        $response = $this->putJson(\sprintf(self::BASE_URL.'/%s', $user->id), [
+            'name' => 1
+        ], [
+            'Authorization' => 'Bearer '.$bearerToken
+        ]);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }
